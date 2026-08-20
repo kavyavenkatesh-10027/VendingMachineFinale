@@ -322,7 +322,11 @@ class AdminUI : Interactable {
         while (true) {
             val input = prompt("  Product ID (or NEW to register): ")
             val productId = when {
-                input.equals("NEW", ignoreCase = true) -> registerProduct(category)
+                input.equals("NEW", ignoreCase = true) -> {
+                    try { registerProduct(category) }
+                    catch (e: VendingMachineException) { println("  [!] ${e.message}"); continue }
+                    catch (e: IllegalArgumentException) { println("  [!] ${e.message}"); continue }
+                }
                 input.isBlank() -> {
                     if (batches.isEmpty()) { println("  At least one batch required."); continue }
                     break
