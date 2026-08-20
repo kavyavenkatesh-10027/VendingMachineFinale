@@ -50,17 +50,18 @@ class AdminUI : Interactable {
 
     private fun createVendingMachine() {
         println("\n--- Create Vending Machine ---")
-        val category     = readEnum(ProductCategory::class.java, "Product category")
-        val location     = readEnum(Location::class.java, "Location")
+        val category      = readEnum(ProductCategory::class.java, "Product category")
+        val location      = readEnum(Location::class.java, "Location")
         val establishedOn = readDate("Established on (yyyy-MM-dd): ")
 
         displayProductMenu(category)
         val batches = readBatchList(category, "first slot")
 
         val vm = AdminController.createVendingMachine(location, establishedOn, batches, category)
+        println("\nVending machine created successfully!")
+        println("  Batches added: ${batches.size}")
         addCashToDrawer(vm.vendingMachineId)
-        println("\nVending machine created: ${vm.vendingMachineId}")
-        println(vm)
+        println("\n$vm")
     }
 
     // ── 2. View Vending Machine ────────────────────────────────────────────────
@@ -133,7 +134,7 @@ class AdminUI : Interactable {
         println("\nSlots on $vmId:")
         slots.sortedBy { it.slotId }.forEach { println("  ${it.slotId}") }
         val slotId = prompt("Slot ID: ")
-        if (slotId.isBlank()) {         // ← yeh add karo
+        if (slotId.isBlank()) {
             println("Cancelled.")
             return null
         }
@@ -360,7 +361,6 @@ class AdminUI : Interactable {
                     quantity = qty
                 )
             )
-            println("  Batch added.")
         }
         return batches
     }
