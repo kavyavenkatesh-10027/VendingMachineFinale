@@ -75,7 +75,11 @@ class AdminUI : Interactable {
             "2" -> {
                 displayVendingMachineMenu()
                 val vmId = prompt("Vending machine ID: ")
-                println("\n${AdminController.viewVendingMachine(vmId)}")
+                val vm = AdminController.viewVendingMachine(vmId)
+                println("\n$vm")
+                AdminController.getAllSlots(vmId)
+                    .sortedBy { it.slotId }
+                    .forEach { println("\n$it") }
             }
             else -> println("Invalid choice.")
         }
@@ -248,10 +252,10 @@ class AdminUI : Interactable {
 
     private fun addCashToDrawer(vmId: String = "") {
         println("\n--- Add Cash to Drawer ---")
-        val vendingMachineId = if (vmId.isBlank()) {
+        val vendingMachineId = vmId.ifBlank {
             displayVendingMachineMenu()
             prompt("Vending machine ID: ")
-        } else vmId
+        }
 
         val denominations = EnumMap<IndianCurrency, Int>(IndianCurrency::class.java)
         println("Enter count for each denomination (Enter to skip):")
