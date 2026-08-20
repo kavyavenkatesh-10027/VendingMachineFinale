@@ -1,7 +1,5 @@
 package ui
 
-import model.enum.Location
-import model.enum.ProductCategory
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
