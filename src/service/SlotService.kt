@@ -61,7 +61,7 @@ object SlotService {
         slot.refillSlot(batch)
     }
 
-    // Why? Centralises batch construction — Food gets calculated expiry, Electronics gets null
+    // Why? Centralised batch construction — Food gets calculated expiry, Electronics gets null
     private fun buildBatch(
         product: model.Product,
         productId: String,

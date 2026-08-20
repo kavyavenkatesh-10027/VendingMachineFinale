@@ -46,7 +46,7 @@ object PurchaseService {
             throw e
         }
 
-        // Deduct stock — FIFO per slot
+        // Deduct stock — based on oldest manufacturing date
         for ((productId, qty) in cart) {
             var remaining = qty
             for (slot in vm.getAllSlots()) {

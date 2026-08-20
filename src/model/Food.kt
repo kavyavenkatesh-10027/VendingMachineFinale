@@ -1,13 +1,11 @@
 package model
 
 import model.enum.FoodType
-import model.enum.Location
 import model.enum.VegNonVeg
 import java.math.BigDecimal
 import java.time.LocalDate
 
-// The purpose of Food is to represent a food product. Shelf life is stored here so the service
-// layer can calculate expiry date for any production batch of this product.
+// The purpose of Food is to represent a food product. Shelf life is stored here so the service layer can calculate expiry date for any production batch of this product.
 class Food(
     productName: String,
     brand: String,
@@ -31,8 +29,7 @@ class Food(
         require(shelfLifeMonths > 0)        { "Shelf life must be greater than zero" }
     }
 
-    // Why? Called by service layer when creating a ProductionBatch — expiry is calculated once
-    // at stocking time and stored on the batch itself.
+    // Why? Called by service layer when creating a ProductionBatch, so that expiry is calculated once at stocking time and stored on the batch itself.
     fun calculateExpiryDate(manufacturingDate: LocalDate): LocalDate =
         manufacturingDate.plusMonths(shelfLifeMonths.toLong())
 

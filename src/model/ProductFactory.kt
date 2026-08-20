@@ -2,7 +2,6 @@ package model
 
 import model.enum.ElectronicTypes
 import model.enum.FoodType
-import model.enum.Location
 import model.enum.VegNonVeg
 import java.math.BigDecimal
 

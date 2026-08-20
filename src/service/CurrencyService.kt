@@ -18,7 +18,7 @@ object CurrencyService {
         return total
     }
 
-    // Why? Greedy algorithm — largest denomination first
+    // Why? Greedy algorithm i.e. largest denomination first
     fun makeChange(drawer: Drawer, changeAmount: BigDecimal): Map<IndianCurrency, Int> {
         if (changeAmount < BigDecimal.ZERO) throw IllegalNegativeValueException("Change amount")
         if (changeAmount.compareTo(BigDecimal.ZERO) == 0) return emptyMap()

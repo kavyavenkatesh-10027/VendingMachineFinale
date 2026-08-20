@@ -5,8 +5,6 @@ import exception.MismatchingProductTypeAndVendingMachine
 import exception.UnknownEntityException
 import exception.VendingMachineException
 import generator.IDGenerator
-import model.Electronics
-import model.Food
 import model.Product
 import model.ProductionBatch
 import model.Slot
@@ -19,9 +17,8 @@ import java.time.LocalDate
 
 object VendingMachineService {
 
-    // Why? Builds the first slot, creates the machine, persists it
     fun createVendingMachine(
-        location: model.enum.Location,
+        location: Location,
         establishedOn: LocalDate,
         firstSlotBatches: List<ProductionBatch>,
         category: ProductCategory
