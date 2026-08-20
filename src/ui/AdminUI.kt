@@ -4,6 +4,7 @@ import controller.AdminController
 import exception.EmptyMenuException
 import exception.VendingMachineException
 import model.Product
+import model.Food
 import model.ProductionBatch
 import model.enum.*
 import java.util.EnumMap
@@ -340,7 +341,7 @@ class AdminUI : Interactable {
                 println("  [!] ${e.message}"); continue
             }
 
-            val expiryDate = if (product is model.Food) product.calculateExpiryDate(mfgDate) else null
+            val expiryDate = if (product is Food) product.calculateExpiryDate(mfgDate) else null
 
             batches.add(
                 ProductionBatch(
