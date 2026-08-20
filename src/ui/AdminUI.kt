@@ -46,7 +46,7 @@ class AdminUI : Interactable {
         }
     }
 
-    // ── 1. Create Vending Machine ──────────────────────────────────────────────
+
 
     private fun createVendingMachine() {
         println("\n--- Create Vending Machine ---")
@@ -64,7 +64,7 @@ class AdminUI : Interactable {
         println("\n$vm")
     }
 
-    // ── 2. View Vending Machine ────────────────────────────────────────────────
+
 
     private fun viewVendingMachine() {
         println("\n--- View Vending Machine ---")
@@ -86,7 +86,7 @@ class AdminUI : Interactable {
         }
     }
 
-    // ── 3. Remove Vending Machine ──────────────────────────────────────────────
+
 
     private fun removeVendingMachine() {
         println("\n--- Remove Vending Machine ---")
@@ -96,7 +96,7 @@ class AdminUI : Interactable {
         println("Removed $vmId.")
     }
 
-    // ── 4. View All Products ───────────────────────────────────────────────────
+
 
     private fun viewAllProducts() {
         val category = readEnum(ProductCategory::class.java, "Product category")
@@ -106,7 +106,7 @@ class AdminUI : Interactable {
         products.sortedBy { it.productId }.forEach { println("$it\n" + "-".repeat(40)) }
     }
 
-    // ── 5. Add Product to Slot ─────────────────────────────────────────────────
+
 
     private fun addProductToSlot() {
         println("\n--- Add Product to Slot ---")
@@ -238,7 +238,7 @@ class AdminUI : Interactable {
         println("  Total units: ${stockMap.values.sum()}")
     }
 
-    // ── 6. View Cash Drawer ────────────────────────────────────────────────────
+
 
     private fun viewCashDrawer() {
         displayVendingMachineMenu()
@@ -249,7 +249,7 @@ class AdminUI : Interactable {
         println("  Total: ₹${AdminController.getTotalCashInMachine(vmId)}")
     }
 
-    // ── 7. Add Cash to Drawer ──────────────────────────────────────────────────
+
 
     private fun addCashToDrawer(vmId: String = "") {
         println("\n--- Add Cash to Drawer ---")
@@ -277,7 +277,7 @@ class AdminUI : Interactable {
         println("  Total: ₹${AdminController.getTotalCashInMachine(vendingMachineId)}")
     }
 
-    // ── 8. View Purchase History ───────────────────────────────────────────────
+
 
     private fun viewPurchaseHistory() {
         val purchases = AdminController.getAllPurchases()
@@ -294,7 +294,7 @@ class AdminUI : Interactable {
         }
     }
 
-    // ── Display helpers ────────────────────────────────────────────────────────
+    // Display helpers
 
     private fun displayVendingMachineMenu() {
         val all = AdminController.viewAllVendingMachines()
@@ -317,7 +317,7 @@ class AdminUI : Interactable {
         println()
     }
 
-    // ── Batch input helper ─────────────────────────────────────────────────────
+
 
     // Why? Reads one or more ProductionBatch entries for a slot from the admin.
     // Each batch = one productId + one manufacturing location + one date + quantity.
@@ -343,7 +343,6 @@ class AdminUI : Interactable {
             val mfgDate  = readDate("  Manufacturing date (yyyy-MM-dd): ")
             val qty      = readInt("  Quantity")
 
-            // Resolve expiry from product's shelf life if it's Food, else null
             val product = try {
                 AdminController.getProductById(productId)
             } catch (e: VendingMachineException) {
