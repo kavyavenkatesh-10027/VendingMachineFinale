@@ -3,8 +3,7 @@ package model
 import model.enum.Gender
 import java.time.LocalDate
 
-// The purpose of User is to provide a template of mandatory data for all user types, and it does
-// this by abstract class.
+// The purpose of User is to provide a template of mandatory data for all user types, and it does this by abstract class.
 abstract class User(
     val name: String,
     val dob: LocalDate,
