@@ -319,11 +319,16 @@ class AdminUI : Interactable {
         val batches = mutableListOf<ProductionBatch>()
         println("Enter batches for $context (blank Product ID to stop):")
         while (true) {
-            val productId = prompt("  Product ID: ")
-            if (productId.isBlank()) {
-                if (batches.isEmpty()) { println("  At least one batch required."); continue }
-                break
+            val input = prompt("  Product ID (or NEW to register): ")
+            val productId = when {
+                input.equals("NEW", ignoreCase = true) -> registerProduct(category)
+                input.isBlank() -> {
+                    if (batches.isEmpty()) { println("  At least one batch required."); continue }
+                    break
+                }
+                else -> input
             }
+
             val location = readEnum(Location::class.java, "  Manufacturing location")
             val mfgDate  = readDate("  Manufacturing date (yyyy-MM-dd): ")
             val qty      = readInt("  Quantity")
