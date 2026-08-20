@@ -15,8 +15,8 @@ interface Interactable {
         while (true) {
             print("$label : ")
             try {
-                val v = readln().trim().toInt()
-                if (v > 0) return v
+                val value = readln().trim().toInt()
+                if (value > 0) return value
                 println("Please enter a number greater than zero.")
             } catch (_: NumberFormatException) {
                 println("Invalid input. Please enter a whole number greater than zero.")
@@ -36,8 +36,8 @@ interface Interactable {
         while (true) {
             print(label)
             try {
-                val v = BigDecimal(readln().trim())
-                if (v > BigDecimal.ZERO) return v
+                val value = BigDecimal(readln().trim())
+                if (value > BigDecimal.ZERO) return value
                 println("Please enter a number greater than zero.")
             } catch (_: NumberFormatException) {
                 println("Invalid input.")
@@ -48,7 +48,7 @@ interface Interactable {
     fun <T : Enum<T>> readEnum(clazz: Class<T>, label: String): T {
         val constants = clazz.enumConstants
         println("$label options:")
-        constants.forEachIndexed { i, v -> println("  ${i + 1}. $v") }
+        constants.forEachIndexed { i, value -> println("  ${i + 1}. $value") }
         while (true) {
             print("Choose (1-${constants.size}): ")
             try {
