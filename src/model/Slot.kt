@@ -3,11 +3,9 @@ package model
 import exception.AvailabilityRequirementException
 import exception.UnregisteredEntityException
 import generator.IDGenerator
-import java.time.LocalDate
 
 // The purpose of Slot is to represent one physical rack inside a vending machine.
-// A slot holds ProductionBatches — each batch is one production run of one product
-// (same factory, same manufacturing date). FIFO: oldest batch sold first.
+// A slot holds ProductionBatches
 class Slot(
     val vendingMachineId: String,
     private val batches: MutableList<ProductionBatch> = mutableListOf()
