@@ -18,11 +18,12 @@ class AdminUI : Interactable {
             println("1. Create vending machine")
             println("2. View vending machine")
             println("3. Remove vending machine")
-            println("4. View all products")
-            println("5. Add product to slot")
-            println("6. View cash drawer")
-            println("7. Add cash to drawer")
-            println("8. View purchase history")
+            println("4. Register product")
+            println("5. View all products")
+            println("6. Add product to slot")
+            println("7. View cash drawer")
+            println("8. Add cash to drawer")
+            println("9. View purchase history")
             println("0. Exit")
             println("=================================")
             try {
@@ -30,11 +31,12 @@ class AdminUI : Interactable {
                     "1" -> createVendingMachine()
                     "2" -> viewVendingMachine()
                     "3" -> removeVendingMachine()
-                    "4" -> viewAllProducts()
-                    "5" -> addProductToSlot()
-                    "6" -> viewCashDrawer()
-                    "7" -> addCashToDrawer()
-                    "8" -> viewPurchaseHistory()
+                    "4" -> registerProductStandalone()
+                    "5" -> viewAllProducts()
+                    "6" -> addProductToSlot()
+                    "7" -> viewCashDrawer()
+                    "8" -> addCashToDrawer()
+                    "9" -> viewPurchaseHistory()
                     "0" -> running = false
                     else -> println("Invalid choice.")
                 }
@@ -48,15 +50,38 @@ class AdminUI : Interactable {
 
 
 
+    private fun registerProductStandalone() {
+        println("\n--- Register Product ---")
+        val category = readEnum(ProductCategory::class.java, "Product category")
+        val product = when (category) {
+            ProductCategory.FOOD       -> registerFood()
+            ProductCategory.ELECTRONIC -> registerElectronics()
+        }
+        println("\nProduct registered successfully!")
+        println(product)
+    }
+
+
+
     private fun createVendingMachine() {
         println("\n--- Create Vending Machine ---")
         val category      = readEnum(ProductCategory::class.java, "Product category")
         val location      = readEnum(Location::class.java, "Location")
         val establishedOn = readDate("Established on (yyyy-MM-dd): ")
 
-        displayProductMenu(category)
-        val batches = readBatchList(category, "first slot")
+        val hasProducts = displayProductMenu(category)
+        if (!hasProducts) {
+            println("No ${category.name.lowercase()} products registered.")
+            val register = prompt("Register one now? (y/n): ")
+            if (!register.equals("y", ignoreCase = true)) {
+                println("Cancelled. Register a product first.")
+                return
+            }
+            registerProduct(category)
+            displayProductMenu(category)  // ab dikhao registered product
+        }
 
+        val batches = readBatchList(category, "first slot")
         val vm = AdminController.createVendingMachine(location, establishedOn, batches, category)
         println("\nVending machine created successfully!")
         println("  Batches added: ${batches.size}")
@@ -142,7 +167,17 @@ class AdminUI : Interactable {
     }
 
     private fun createNewSlot(vmId: String, category: ProductCategory): String {
-        displayProductMenu(category)
+        val hasProducts = displayProductMenu(category)
+        if (!hasProducts) {
+            println("No ${category.name.lowercase()} products registered.")
+            val register = prompt("Register one now? (y/n): ")
+            if (!register.equals("y", ignoreCase = true)) {
+                println("Cancelled.")
+                return ""
+            }
+            registerProduct(category)
+            displayProductMenu(category)
+        }
         val batches = readBatchList(category, "new slot")
         val slot = AdminController.addSlotToVendingMachine(vmId, batches)
         println("\nSlot added: ${slot.slotId}")
@@ -199,7 +234,7 @@ class AdminUI : Interactable {
         val ingredients = prompt("Ingredients (comma-separated): ").split(",").map { it.trim() }
         val foodType    = readEnum(FoodType::class.java, "Food type")
         val food = AdminController.registerFood(name, brand, description, warning, price,
-             vegNonVeg, ingredients, shelfLife, foodType)
+            vegNonVeg, ingredients, shelfLife, foodType)
         println("\nFood registered: ${food.productId}")
         return food
     }
@@ -216,7 +251,7 @@ class AdminUI : Interactable {
         val battery       = prompt("Battery powered? (y/n): ").equals("y", ignoreCase = true)
         val electronicsType = readEnum(ElectronicTypes::class.java, "Electronics type")
         val e = AdminController.registerElectronics(name, brand, description, warning, price,
-             warranty, battery, electronicsType)
+            warranty, battery, electronicsType)
         println("\nElectronics registered: ${e.productId}")
         return e
     }
@@ -306,15 +341,16 @@ class AdminUI : Interactable {
         println()
     }
 
-    private fun displayProductMenu(category: ProductCategory) {
+    private fun displayProductMenu(category: ProductCategory): Boolean {
         val products = AdminController.getAllProductsOfCategory(category)
             .sortedBy { it.productId.substringAfterLast("-").toIntOrNull() ?: 0 }
-        if (products.isEmpty()) throw EmptyMenuException(category.toString().lowercase())
+        if (products.isEmpty()) return false
         println("\n@$category Products:")
         products.sortedBy { it.productId }.forEach {
             println("  ${it.productId} | ${it.productName} | ${it.brand} | ₹${it.price}")
         }
         println()
+        return true
     }
 
 
