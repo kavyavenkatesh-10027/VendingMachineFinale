@@ -5,7 +5,7 @@ import exception.MismatchingProductTypeAndVendingMachine
 import exception.UnregisteredEntityException
 import model.Electronics
 import model.Food
-import model.ProductionBatch
+import model.CommonValuesBatch
 import model.enum.Location
 import model.enum.ProductCategory
 import repository.ProductRepository
@@ -68,12 +68,12 @@ object SlotService {
         manufacturingLocation: Location,
         manufacturingDate: LocalDate,
         quantity: Int
-    ): ProductionBatch {
+    ): CommonValuesBatch {
         val expiryDate = when (product) {
             is Food        -> product.calculateExpiryDate(manufacturingDate)
             is Electronics -> null
         }
-        return ProductionBatch(
+        return CommonValuesBatch(
             productId = productId,
             manufacturingLocation = manufacturingLocation,
             manufacturingDate = manufacturingDate,

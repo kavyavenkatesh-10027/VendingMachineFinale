@@ -3,7 +3,7 @@ package controller
 import model.Electronics
 import model.Food
 import model.Product
-import model.ProductionBatch
+import model.CommonValuesBatch
 import model.Purchase
 import model.Slot
 import model.VendingMachine
@@ -17,14 +17,14 @@ object AdminController : BaseController() {
     fun createVendingMachine(
         location: Location,
         establishedOn: LocalDate,
-        firstSlotBatches: List<ProductionBatch>,
+        firstSlotBatches: List<CommonValuesBatch>,
         category: ProductCategory
     ): VendingMachine {
         require(firstSlotBatches.isNotEmpty()) { "First slot must have at least one batch." }
         return VendingMachineService.createVendingMachine(location, establishedOn, firstSlotBatches, category)
     }
 
-    fun addSlotToVendingMachine(vendingMachineId: String, batches: List<ProductionBatch>): Slot {
+    fun addSlotToVendingMachine(vendingMachineId: String, batches: List<CommonValuesBatch>): Slot {
         require(vendingMachineId.isNotBlank()) { "Vending machine ID cannot be empty" }
         require(batches.isNotEmpty())          { "Slot must have at least one batch" }
         return VendingMachineService.addSlotToVendingMachine(vendingMachineId, batches)

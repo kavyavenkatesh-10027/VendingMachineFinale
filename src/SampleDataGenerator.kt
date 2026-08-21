@@ -60,14 +60,14 @@ object SampleDataGenerator {
 
         // ── ProductionBatches ──────────────────────────────────────────────────
         // Slot 1: Lays — two batches from Coimbatore (FIFO: older sold first)
-        val laysBatch1 = ProductionBatch(
+        val laysBatch1 = CommonValuesBatch(
             productId = lays.productId,
             manufacturingLocation = Location.COIMBATORE,
             manufacturingDate = LocalDate.now().minusMonths(1),
             expiryDate = lays.calculateExpiryDate(LocalDate.now().minusMonths(1)),
             quantity = 10
         )
-        val laysBatch2 = ProductionBatch(
+        val laysBatch2 = CommonValuesBatch(
             productId = lays.productId,
             manufacturingLocation = Location.COIMBATORE,
             manufacturingDate = LocalDate.now().minusDays(5),
@@ -76,14 +76,14 @@ object SampleDataGenerator {
         )
 
         // Slot 2: Bisleri + CocaCola
-        val bisleriBatch = ProductionBatch(
+        val bisleriBatch = CommonValuesBatch(
             productId = bisleri.productId,
             manufacturingLocation = Location.PORUR,
             manufacturingDate = LocalDate.now().minusDays(10),
             expiryDate = bisleri.calculateExpiryDate(LocalDate.now().minusDays(10)),
             quantity = 20
         )
-        val colaOldBatch = ProductionBatch(
+        val colaOldBatch = CommonValuesBatch(
             productId = cocaCola.productId,
             manufacturingLocation = Location.TAMBARAM,
             manufacturingDate = LocalDate.now().minusMonths(1),
@@ -92,7 +92,7 @@ object SampleDataGenerator {
         )
 
         // Slot 3: Monster Energy
-        val monsterBatch = ProductionBatch(
+        val monsterBatch = CommonValuesBatch(
             productId = monster.productId,
             manufacturingLocation = Location.VELACHERY,
             manufacturingDate = LocalDate.now().minusMonths(3),

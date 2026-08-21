@@ -6,7 +6,7 @@ import exception.UnknownEntityException
 import exception.VendingMachineException
 import generator.IDGenerator
 import model.Product
-import model.ProductionBatch
+import model.CommonValuesBatch
 import model.Slot
 import model.VendingMachine
 import model.enum.Location
@@ -20,7 +20,7 @@ object VendingMachineService {
     fun createVendingMachine(
         location: Location,
         establishedOn: LocalDate,
-        firstSlotBatches: List<ProductionBatch>,
+        firstSlotBatches: List<CommonValuesBatch>,
         category: ProductCategory
     ): VendingMachine {
         require(establishedOn <= LocalDate.now()) { "Established date must be on or before today" }
@@ -34,7 +34,7 @@ object VendingMachineService {
 
     fun addSlotToVendingMachine(
         vendingMachineId: String,
-        batches: List<ProductionBatch>
+        batches: List<CommonValuesBatch>
     ): Slot {
         val vm = getVendingMachineById(vendingMachineId)
         validateBatches(vm.productTypeInside, batches)
@@ -102,7 +102,7 @@ object VendingMachineService {
         vm.getAllSlots().sumOf { it.getSellableQuantity(productId) }
 
     // Why? Validates that every batch belongs to the right category and is not expired
-    private fun validateBatches(category: ProductCategory, batches: List<ProductionBatch>) {
+    private fun validateBatches(category: ProductCategory, batches: List<CommonValuesBatch>) {
         require(batches.isNotEmpty()) { "A slot must have at least one batch." }
         for (batch in batches) {
             val product = ProductRepository.findById(batch.productId)

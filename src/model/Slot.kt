@@ -5,10 +5,9 @@ import exception.UnregisteredEntityException
 import generator.IDGenerator
 
 // The purpose of Slot is to represent one physical rack inside a vending machine.
-// A slot holds ProductionBatches
 class Slot(
     val vendingMachineId: String,
-    private val batches: MutableList<ProductionBatch> = mutableListOf()
+    private val batches: MutableList<CommonValuesBatch> = mutableListOf()
 ) {
     val slotId: String = IDGenerator.generateSlotId()
 
@@ -17,13 +16,13 @@ class Slot(
     }
 
     // Why? Read-only defensive copy so callers cannot mutate internal state
-    fun getBatches(): List<ProductionBatch> = batches.toList()
+    fun getBatches(): List<CommonValuesBatch> = batches.toList()
 
     // Why? Returns the set of unique productIds currently in this slot
     fun getProductIds(): Set<String> = batches.map { it.productId }.toSet()
 
     // Why? Adds the very first batch of a product type that has never been in this slot before
-    fun addNewProductTypeToSlot(batch: ProductionBatch) {
+    fun addNewProductTypeToSlot(batch: CommonValuesBatch) {
         require(!batch.isExpired()) {
             "Cannot stock an already-expired batch (${batch.batchId})"
         }
@@ -36,7 +35,7 @@ class Slot(
     }
 
     // Why? Adds a new production batch to a product that already exists in this slot (refill)
-    fun refillSlot(batch: ProductionBatch) {
+    fun refillSlot(batch: CommonValuesBatch) {
         require(!batch.isExpired()) {
             "Cannot stock an already-expired batch (${batch.batchId})"
         }

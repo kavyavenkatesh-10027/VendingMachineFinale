@@ -4,8 +4,8 @@ import generator.IDGenerator
 import model.enum.Location
 import java.time.LocalDate
 
-// The purpose of ProductionBatch is to represent one real-world production run of a product made in the same factory, same manufacturing date, fixed quantity. This is what physically arrives at a slot. Expiry is stored directly after calculating (null in cases where it does not apply).
-data class ProductionBatch(
+// The purpose of CommonValuesBatch is to represent one real-world production run of a product made in the same factory, same manufacturing date, fixed quantity. This is what physically arrives at a slot. Expiry is stored directly after calculating (null in cases where it does not apply).
+data class CommonValuesBatch(
     val productId: String,
     val manufacturingLocation: Location,
     val manufacturingDate: LocalDate,

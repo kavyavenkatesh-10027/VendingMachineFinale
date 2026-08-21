@@ -29,7 +29,7 @@ class Food(
         require(shelfLifeMonths > 0)        { "Shelf life must be greater than zero" }
     }
 
-    // Why? Called by service layer when creating a ProductionBatch, so that expiry is calculated once at stocking time and stored on the batch itself.
+    // Why? Called by service layer when creating a CommonValuesBatch, so that expiry is calculated once at stocking time and stored on the batch itself.
     fun calculateExpiryDate(manufacturingDate: LocalDate): LocalDate =
         manufacturingDate.plusMonths(shelfLifeMonths.toLong())
 

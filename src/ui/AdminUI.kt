@@ -5,7 +5,7 @@ import exception.EmptyMenuException
 import exception.VendingMachineException
 import model.Product
 import model.Food
-import model.ProductionBatch
+import model.CommonValuesBatch
 import model.enum.*
 import java.util.EnumMap
 
@@ -355,10 +355,10 @@ class AdminUI : Interactable {
 
 
 
-    // Why? Reads one or more ProductionBatch entries for a slot from the admin.
+    // Why? Reads one or more CommonValuesBatch entries for a slot from the admin.
     // Each batch = one productId + one manufacturing location + one date + quantity.
-    private fun readBatchList(category: ProductCategory, context: String): List<ProductionBatch> {
-        val batches = mutableListOf<ProductionBatch>()
+    private fun readBatchList(category: ProductCategory, context: String): List<CommonValuesBatch> {
+        val batches = mutableListOf<CommonValuesBatch>()
         println("Enter batches for $context (blank Product ID to stop):")
         while (true) {
             val input = prompt("  Product ID (or NEW to register): ")
@@ -388,7 +388,7 @@ class AdminUI : Interactable {
             val expiryDate = if (product is Food) product.calculateExpiryDate(mfgDate) else null
 
             batches.add(
-                ProductionBatch(
+                CommonValuesBatch(
                     productId = productId,
                     manufacturingLocation = location,
                     manufacturingDate = mfgDate,
