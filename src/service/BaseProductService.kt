@@ -21,11 +21,7 @@ abstract class BaseProductService<T : Product> {
         }
 
         fun productExistsById(productId: String): Boolean {
-            return if (FoodRepository.existsById(productId) or ElectronicsRepository.existsById(productId)) {
-                true
-            } else {
-                false
-            }
+            return FoodRepository.existsById(productId) || ElectronicsRepository.existsById(productId)
         }
     }
 }
