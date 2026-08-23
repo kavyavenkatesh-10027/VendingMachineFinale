@@ -9,17 +9,17 @@ object IDGenerator {
     private var nextPurchaseId = 1L
     private var nextBatchId = 1L
 
-    fun peekNextVendingMachineId(): String = "vendingMachine-$nextVendingMachineId"
+    fun peekNextVendingMachineId(): String = "VDM-$nextVendingMachineId"
 
-    fun generateVendingMachineId(): String = "vendingMachine-${nextVendingMachineId++}"
+    fun generateVendingMachineId(): String = "VDM-${nextVendingMachineId++}"
 
-    fun generateSlotId(): String = "slot-${nextSlotId++}"
+    fun generateSlotId(): String = "SLT-${nextSlotId++}"
 
-    fun generateAdminId(): String = "admin-${nextAdminId++}"
+    fun generateAdminId(): String = "ADM-${nextAdminId++}"
 
-    fun generateProductId(): String = "product-${nextProductId++}"
+    fun generateProductId(): String = "PDT-${nextProductId++}"
 
-    fun generatePurchaseId(): String = "purchase-${nextPurchaseId++}"
+    fun generatePurchaseId(): String = "PCH-${nextPurchaseId++}"
 
-    fun generateBatchId(): String = "batch-${nextBatchId++}"
+    fun generateBatchId(): String = "BTC-${nextBatchId++}"
 }

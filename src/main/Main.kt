@@ -33,5 +33,5 @@ fun main() {
 
 fun validateAdmin(): Boolean {
     print("Enter passcode: ")
-    return readln().trim() == "Aloha"
+    return readln().trim() == "test"
 }
