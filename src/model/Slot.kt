@@ -1,10 +1,10 @@
 package model
 
+import controller.AdminController
 import exception.AvailabilityRequirementException
 import exception.UnregisteredEntityException
 import generator.IDGenerator
 
-// The purpose of Slot is to represent one physical rack inside a vending machine.
 class Slot(
     val vendingMachineId: String,
     private val batches: MutableList<CommonValuesBatch> = mutableListOf()
@@ -15,13 +15,10 @@ class Slot(
         require(vendingMachineId.isNotBlank()) { "Vending machine ID cannot be blank" }
     }
 
-    // Why? Read-only defensive copy so callers cannot mutate internal state
     fun getBatches(): List<CommonValuesBatch> = batches.toList()
 
-    // Why? Returns the set of unique productIds currently in this slot
     fun getProductIds(): Set<String> = batches.map { it.productId }.toSet()
 
-    // Why? Adds the very first batch of a product type that has never been in this slot before
     fun addNewProductTypeToSlot(batch: CommonValuesBatch) {
         require(!batch.isExpired()) {
             "Cannot stock an already-expired batch (${batch.batchId})"
@@ -34,7 +31,6 @@ class Slot(
         batches.add(batch)
     }
 
-    // Why? Adds a new production batch to a product that already exists in this slot (refill)
     fun refillSlot(batch: CommonValuesBatch) {
         require(!batch.isExpired()) {
             "Cannot stock an already-expired batch (${batch.batchId})"
@@ -48,7 +44,6 @@ class Slot(
         batches.add(batch)
     }
 
-    // Why? FIFO drain — always sell from the oldest manufacturing date first
     fun sellFromSlot(productId: String, quantity: Int) {
         require(quantity > 0) { "Quantity must be greater than zero" }
 
@@ -77,7 +72,6 @@ class Slot(
         batches.removeIf { it.quantity == 0 }
     }
 
-    // Why? Total sellable (non-expired) units of a product in this slot
     fun getSellableQuantity(productId: String): Int =
         batches
             .filter { it.productId == productId && !it.isExpired() }
@@ -92,19 +86,52 @@ class Slot(
     override fun hashCode(): Int = slotId.hashCode()
 
     override fun toString(): String {
-        val batchLines = batches
-            .groupBy { it.productId }
-            .entries
-            .joinToString("\n    ") { (pid, pBatches) ->
-                "$pid ->\n        " + pBatches
-                    .sortedBy { it.manufacturingDate }
-                    .joinToString("\n        ") { it.toString() }
+        val totalQty = batches.sumOf { it.quantity }
+        val width = 82
+        val innerWidth = width - 4
+
+        val content = if (batches.isEmpty()) {
+            "  [ EMPTY SLOT ] No batches currently stocked.".padEnd(width - 1)
+        } else {
+            batches.groupBy { it.productId }.entries.joinToString("\n".padEnd(width - 1) + "\n") { (pid, pBatches) ->
+                val productName = try {
+                    AdminController.getProductById(pid).productName
+                } catch (_: Exception) {
+                    "Unknown Product"
+                }
+                val totalProductQty = pBatches.sumOf { it.quantity }
+
+                val headerText = "$productName [$pid] (Total: $totalProductQty units)"
+                val headerLine = headerText.padEnd(innerWidth)
+
+                val batchLines = pBatches.sortedBy { it.manufacturingDate }.joinToString("\n") { b ->
+                    val exp = b.expiryDate?.toString() ?: "N/A"
+                    val status = if (b.isExpired()) "EXPIRED" else "OK"
+                    val rowText = "   ├─ Batch: %-12s │ MFD: %-10s │ Exp: %-14s │ Qty: %-3d [%s]".format(
+                        b.batchId, b.manufacturingDate, exp, b.quantity, status
+                    )
+                    rowText.padEnd(innerWidth)
+                }
+                "$headerLine\n$batchLines"
             }
+        }
+
+        val slotLine = "  Slot ID            : $slotId".padEnd(width - 1)
+        val vmLine   = "  Vending Machine ID : $vendingMachineId".padEnd(width - 1)
+        val qtyLine  = "  Total Units        : $totalQty".padEnd(width - 1)
+
         return """
-Slot ID                : $slotId
-Vending Machine ID     : $vendingMachineId
-Batches:
-    $batchLines
-        """.trimIndent()
+
+  SLOT DETAILS${"".padEnd(innerWidth - 12)} 
+
+$slotLine
+$vmLine
+$qtyLine
+
+  BATCH INVENTORY${"".padEnd(innerWidth - 15)} 
+
+$content
+
+    """.trimIndent()
     }
 }

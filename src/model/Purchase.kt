@@ -33,9 +33,9 @@ data class Purchase(
             Purchase ID       : $purchaseId
             Time              : ${purchaseTime.format(formatter)}
             Items             : $itemsFormatted
-            Total             : ₹$totalAmount
-            Paid              : ₹$moneyPaidByCustomer
-            Change Returned   : ₹$changeReturned
+            Total             : Rs.$totalAmount
+            Paid              : Rs.$moneyPaidByCustomer
+            Change Returned   : Rs.$changeReturned
             
         """.trimMargin()
     }

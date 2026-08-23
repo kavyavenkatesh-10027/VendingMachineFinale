@@ -49,30 +49,50 @@ class ConsumerUI : Interactable {
         val products = ConsumerController.viewAvailableProducts(vmId)
             .sortedBy { it.productId.substringAfterLast("-").toIntOrNull() ?: 0 }
         val category = AdminController.getCategoryByVendingMachineId(vmId)
+
         println("\n===== Available $category Products =====")
-        if (products.isEmpty()) { println("  No products in stock."); return }
+        if (products.isEmpty()) {
+            println("  No products in stock.")
+            return
+        }
 
         when (category) {
             ProductCategory.FOOD -> {
-                println("  %-12s %-22s %8s  %-10s  %-10s  %-14s  %5s"
-                    .format("Product ID", "Name", "Price", "Type", "Veg/NonVeg", "Warning", "Stock"))
-                println("  " + "-".repeat(90))
+                // Layout: ID(10) | Name(24) | Price(8) | Type(14) | Diet(8) | Warning(30) | Stock(6)
+                println("  %-10s %-24s %8s  %-14s %-8s %-30s %6s"
+                    .format("Product ID", "Name", "Price", "Type", "Diet", "Warning", "Stock"))
+                println("  " + "-".repeat(108))
+
                 for (p in products) {
                     val qty = ConsumerController.getAvailableStock(vmId, p.productId)
                     val f = p as Food
-                    println("  %-12s %-22s Rs.%-5s  %-10s  %-10s  %-14s  %5d"
-                        .format(p.productId, p.productName, p.price, f.foodType, f.vegOrNonVeg, p.warning ?: "-", qty))
+                    val priceStr = "Rs.${p.price}"
+
+                    // Truncate warning to 28 chars so it never breaks layout
+                    val rawWarning = p.warning ?: "-"
+                    val warningStr = if (rawWarning.length > 28) rawWarning.take(25) + "..." else rawWarning
+
+                    println("  %-10s %-24s %8s  %-14s %-8s %-30s %6d"
+                        .format(p.productId, p.productName, priceStr, f.foodType, f.vegOrNonVeg, warningStr, qty))
                 }
             }
             ProductCategory.ELECTRONIC -> {
-                println("  %-12s %-22s %8s  %-18s  %-10s  %-14s  %5s"
+                // Layout: ID(10) | Name(24) | Price(8) | Type(18) | Warranty(10) | Warning(20) | Stock(6)
+                println("  %-10s %-24s %8s  %-18s %-10s %-20s %6s"
                     .format("Product ID", "Name", "Price", "Type", "Warranty", "Warning", "Stock"))
-                println("  " + "-".repeat(95))
+                println("  " + "-".repeat(102))
+
                 for (p in products) {
                     val qty = ConsumerController.getAvailableStock(vmId, p.productId)
                     val e = p as Electronics
-                    println("  %-12s %-22s Rs.%-5s  %-18s  %-10s  %-14s  %5d"
-                        .format(p.productId, p.productName, p.price, e.electronicsType, "${e.warrantyMonths}m", p.warning ?: "-", qty))
+                    val priceStr = "Rs.${p.price}"
+                    val warrantyStr = "${e.warrantyMonths}m"
+
+                    val rawWarning = p.warning ?: "-"
+                    val warningStr = if (rawWarning.length > 18) rawWarning.take(15) + "..." else rawWarning
+
+                    println("  %-10s %-24s %8s  %-18s %-10s %-20s %6d"
+                        .format(p.productId, p.productName, priceStr, e.electronicsType, warrantyStr, warningStr, qty))
                 }
             }
         }
@@ -87,7 +107,7 @@ class ConsumerUI : Interactable {
         if (cart.isEmpty()) { println("Nothing in cart. Returning."); return }
 
         val total = ConsumerController.getCartTotal(cart)
-        println("\n  Cart total: ₹$total")
+        println("\n  Cart total: Rs.$total")
 
         val payment = collectPayment(total)
         if (payment.isEmpty()) { println("Purchase cancelled."); return }
@@ -121,7 +141,7 @@ class ConsumerUI : Interactable {
         println("Type amount or DONE to cancel.\n")
 
         while (paid < totalRequired) {
-            println("  Paid: ₹$paid  |  Still needed: ₹${totalRequired - paid}")
+            println("  Paid: Rs.$paid  |  Still needed: Rs.${totalRequired - paid}")
             val input = prompt("  Insert: ")
 
             if (input == "DONE") { println("Cancelled."); return EnumMap(IndianCurrency::class.java) }
@@ -131,7 +151,7 @@ class ConsumerUI : Interactable {
 
             payment[coin] = (payment[coin] ?: 0) + 1
             paid += BigDecimal.valueOf(coin.value.toLong())
-            println("  Accepted ₹${coin.value}  |  Total: ₹$paid")
+            println("  Accepted Rs.${coin.value}  |  Total: Rs.$paid")
         }
         return payment
     }
@@ -143,12 +163,12 @@ class ConsumerUI : Interactable {
         println("  ID     : ${purchase.purchaseId}")
         println("  Time   : ${purchase.purchaseTime}")
         println("  Items  : ${purchase.getItemsPurchased()}")
-        println("  Total  : ₹${purchase.totalAmount}")
-        println("  Paid   : ₹${purchase.moneyPaidByCustomer}")
-        println("  Change : ₹${purchase.changeReturned}")
+        println("  Total  : Rs.${purchase.totalAmount}")
+        println("  Paid   : Rs.${purchase.moneyPaidByCustomer}")
+        println("  Change : Rs.${purchase.changeReturned}")
         println("=====================================")
         if (purchase.changeReturned > BigDecimal.ZERO)
-            println("  Please collect your change: ₹${purchase.changeReturned}")
+            println("  Please collect your change: Rs.${purchase.changeReturned}")
         println("  Thank you!")
         println("=====================================\n")
     }

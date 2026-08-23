@@ -105,7 +105,7 @@ class AdminUI : Interactable {
                 println("\n$vm")
                 AdminController.getAllSlots(vmId)
                     .sortedBy { it.slotId }
-                    .forEach { println("\n$it") }
+                    .forEach { println("\n----------------------------------------------------------------------------------------------------\n$it") }
             }
             else -> println("Invalid choice.")
         }
@@ -150,20 +150,32 @@ class AdminUI : Interactable {
     }
 
     private fun pickExistingSlot(vmId: String, category: ProductCategory): String? {
-        val slots = AdminController.getAllSlots(vmId).filter { it.vendingMachineId == vmId }
+        val slots = AdminController.getAllSlots(vmId)
+
         if (slots.isEmpty()) {
-            println("No existing slots — creating a new one.")
+            println("No existing slots - creating a new one.")
             createNewSlot(vmId, category)
             return null
         }
+
         println("\nSlots on $vmId:")
         slots.sortedBy { it.slotId }.forEach { println("  ${it.slotId}") }
-        val slotId = prompt("Slot ID: ").uppercase()
-        if (slotId.isBlank()) {
-            println("Cancelled.")
-            return null
+
+        while (true) {
+            val slotId = prompt("Slot ID: ").trim().uppercase()
+
+            if (slotId.isBlank()) {
+                println("Slot ID cannot be blank. Please enter a valid ID.")
+                continue
+            }
+
+            if (slots.none { it.slotId == slotId }) {
+                println("Slot '$slotId' does not exist in vending machine '$vmId'.")
+                continue
+            }
+
+            return slotId
         }
-        return slotId
     }
 
     private fun createNewSlot(vmId: String, category: ProductCategory): String {
@@ -262,7 +274,9 @@ class AdminUI : Interactable {
     }
 
     private fun viewProductCount(vmId: String) {
-        val stockMap = AdminController.getProductCountForMachine(vmId)
+        val stockMap = AdminController.getProductCountForMachine(vmId).toSortedMap(compareBy { id ->
+            id.removePrefix("PDT-").toIntOrNull() ?: 0
+        })
         if (stockMap.isEmpty()) { println("No products stocked."); return }
         println("\n  %-14s %-24s %8s  %6s".format("Product ID", "Name", "Price", "Stock"))
         println("  " + "-".repeat(58))
@@ -281,7 +295,7 @@ class AdminUI : Interactable {
         println("\n===== Cash Drawer — $vmId =====")
         AdminController.getDenominationBreakdown(vmId)
             .forEach { (denom, count) -> println("  Rs.%-4d  x  %d".format(denom.value, count)) }
-        println("  Total: ₹${AdminController.getTotalCashInMachine(vmId)}")
+        println("  Total: Rs.${AdminController.getTotalCashInMachine(vmId)}")
     }
 
 
@@ -309,7 +323,7 @@ class AdminUI : Interactable {
         println("\nCash added. Current drawer:")
         AdminController.getDenominationBreakdown(vendingMachineId)
             .forEach { (denom, count) -> println("  Rs.%-4d  x  %d".format(denom.value, count)) }
-        println("  Total: ₹${AdminController.getTotalCashInMachine(vendingMachineId)}")
+        println("  Total: Rs.${AdminController.getTotalCashInMachine(vendingMachineId)}")
     }
 
 
@@ -322,9 +336,9 @@ class AdminUI : Interactable {
             println("  ID     : ${p.purchaseId}")
             println("  Time   : ${p.purchaseTime}")
             println("  Items  : ${p.getItemsPurchased()}")
-            println("  Total  : ₹${p.totalAmount}")
-            println("  Paid   : ₹${p.moneyPaidByCustomer}")
-            println("  Change : ₹${p.changeReturned}")
+            println("  Total  : Rs.${p.totalAmount}")
+            println("  Paid   : Rs.${p.moneyPaidByCustomer}")
+            println("  Change : Rs.${p.changeReturned}")
             println("  " + "-".repeat(40))
         }
     }
@@ -347,7 +361,7 @@ class AdminUI : Interactable {
         if (products.isEmpty()) return false
         println("\n@$category Products:")
         products.sortedBy { it.productId }.forEach {
-            println("  ${it.productId} | ${it.productName} | ${it.brand} | ₹${it.price}")
+            println("  ${it.productId} | ${it.productName} | ${it.brand} | Rs.${it.price}")
         }
         println()
         return true

@@ -48,6 +48,6 @@ Type                    : $productTypeInside
 Location                : $vendingMachineLocation
 Established On          : $establishedOn
 Number of Slots         : ${slots.size}
-Cash Available          : ₹${drawer.totalCash()}
+Cash Available          : Rs.${drawer.totalCash()}
         """.trimIndent()
 }

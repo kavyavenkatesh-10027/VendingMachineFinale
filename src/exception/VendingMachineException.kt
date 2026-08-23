@@ -9,11 +9,11 @@ abstract class VendingMachineException(message: String) : RuntimeException(messa
 class AvailabilityRequirementException(message: String) : VendingMachineException(message)
 
 class InsufficientPaymentException(total: BigDecimal, amountPaid: BigDecimal) : VendingMachineException(
-    "Insufficient payment. Total: ₹$total, Paid: ₹$amountPaid. Collect refund from the inserting plate."
+    "Insufficient payment. Total: Rs.$total, Paid: Rs.$amountPaid. Collect refund from the inserting plate."
 )
 
 class InsufficientDenominationForChangeException(changeAmount: BigDecimal) : VendingMachineException(
-    "Machine cannot make exact change of ₹$changeAmount."
+    "Machine cannot make exact change of Rs.$changeAmount."
 )
 
 class UnknownEntityException(

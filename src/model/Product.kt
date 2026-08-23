@@ -38,7 +38,7 @@ Name                    : $productName
 Category                : $productCategory
 Brand                   : $brand
 Description             : $description
-Price                   : ₹$price
+Price                   : Rs.$price
 Warning                 : ${warning ?: "None"}
         """.trimIndent()
 }

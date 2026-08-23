@@ -38,5 +38,5 @@ class Drawer {
     override fun toString(): String =
         "Drawer\n------\n" +
                 denominations.entries.joinToString("\n") { "  Rs.${it.key.value} x ${it.value}" } +
-                "\nTotal : ₹${totalCash()}"
+                "\nTotal : Rs.${totalCash()}"
 }
