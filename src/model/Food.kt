@@ -1,6 +1,7 @@
 package model
 
 import model.enum.FoodType
+import model.enum.ProductCategory
 import model.enum.VegNonVeg
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -21,7 +22,7 @@ class Food(
     brand = brand,
     description = description,
     price = price,
-    productCategory = model.enum.ProductCategory.FOOD,
+    productCategory = ProductCategory.FOOD,
     warning = warning
 ) {
     init {
