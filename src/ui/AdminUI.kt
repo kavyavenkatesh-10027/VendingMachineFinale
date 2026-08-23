@@ -100,7 +100,7 @@ class AdminUI : Interactable {
                 .forEach { println("\n$it\n" + "-".repeat(40)) }
             "2" -> {
                 displayVendingMachineMenu()
-                val vmId = prompt("Vending machine ID: ")
+                val vmId = prompt("Vending machine ID: ").uppercase()
                 val vm = AdminController.viewVendingMachine(vmId)
                 println("\n$vm")
                 AdminController.getAllSlots(vmId)
@@ -116,7 +116,7 @@ class AdminUI : Interactable {
     private fun removeVendingMachine() {
         println("\n--- Remove Vending Machine ---")
         displayVendingMachineMenu()
-        val vmId = prompt("Vending machine ID to remove: ")
+        val vmId = prompt("Vending machine ID to remove: ").uppercase()
         AdminController.removeVendingMachine(vmId)
         println("Removed $vmId.")
     }
@@ -136,7 +136,7 @@ class AdminUI : Interactable {
     private fun addProductToSlot() {
         println("\n--- Add Product to Slot ---")
         displayVendingMachineMenu()
-        val vmId     = prompt("Vending machine ID: ")
+        val vmId     = prompt("Vending machine ID: ").uppercase()
         val category = AdminController.getCategoryByVendingMachineId(vmId)
 
         println("\n  1. Existing slot   2. New slot")
@@ -158,7 +158,7 @@ class AdminUI : Interactable {
         }
         println("\nSlots on $vmId:")
         slots.sortedBy { it.slotId }.forEach { println("  ${it.slotId}") }
-        val slotId = prompt("Slot ID: ")
+        val slotId = prompt("Slot ID: ").uppercase()
         if (slotId.isBlank()) {
             println("Cancelled.")
             return null
@@ -258,7 +258,7 @@ class AdminUI : Interactable {
 
     private fun pickExistingProduct(category: ProductCategory): String {
         displayProductMenu(category)
-        return prompt("Product ID: ")
+        return prompt("Product ID: ").uppercase()
     }
 
     private fun viewProductCount(vmId: String) {
@@ -277,7 +277,7 @@ class AdminUI : Interactable {
 
     private fun viewCashDrawer() {
         displayVendingMachineMenu()
-        val vmId = prompt("Vending machine ID: ")
+        val vmId = prompt("Vending machine ID: ").uppercase()
         println("\n===== Cash Drawer — $vmId =====")
         AdminController.getDenominationBreakdown(vmId)
             .forEach { (denom, count) -> println("  Rs.%-4d  x  %d".format(denom.value, count)) }
@@ -290,7 +290,7 @@ class AdminUI : Interactable {
         println("\n--- Add Cash to Drawer ---")
         val vendingMachineId = vmId.ifBlank {
             displayVendingMachineMenu()
-            prompt("Vending machine ID: ")
+            prompt("Vending machine ID: ").uppercase()
         }
 
         val denominations = EnumMap<IndianCurrency, Int>(IndianCurrency::class.java)
@@ -361,9 +361,9 @@ class AdminUI : Interactable {
         val batches = mutableListOf<CommonValuesBatch>()
         println("Enter batches for $context (blank Product ID to stop):")
         while (true) {
-            val input = prompt("  Product ID (or NEW to register): ")
+            val input = prompt("  Product ID (or NEW to register): ").uppercase()
             val productId = when {
-                input.equals("NEW", ignoreCase = true) -> {
+                input == "NEW" -> {
                     try { registerProduct(category) }
                     catch (e: VendingMachineException) { println("  [!] ${e.message}"); continue }
                     catch (e: IllegalArgumentException) { println("  [!] ${e.message}"); continue }

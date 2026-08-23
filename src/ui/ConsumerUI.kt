@@ -80,7 +80,7 @@ class ConsumerUI : Interactable {
 
     private fun buyProducts() {
         showAllMachines()
-        val vmId = prompt("Vending machine ID: ")
+        val vmId = prompt("Vending machine ID: ").uppercase()
         showAvailableProducts(vmId)
 
         val cart = buildCart(vmId)
@@ -100,7 +100,7 @@ class ConsumerUI : Interactable {
         val cart = mutableMapOf<String, Int>()
         println("\nAdd items (blank Product ID to finish):")
         while (true) {
-            val productId = prompt("  Product ID: ")
+            val productId = prompt("  Product ID: ").uppercase()
             if (productId.isBlank()) break
             val available = try {
                 ConsumerController.getAvailableStock(vmId, productId)
@@ -122,7 +122,7 @@ class ConsumerUI : Interactable {
 
         while (paid < totalRequired) {
             println("  Paid: ₹$paid  |  Still needed: ₹${totalRequired - paid}")
-            val input = prompt("  Insert: ").uppercase()
+            val input = prompt("  Insert: ")
 
             if (input == "DONE") { println("Cancelled."); return EnumMap(IndianCurrency::class.java) }
 
