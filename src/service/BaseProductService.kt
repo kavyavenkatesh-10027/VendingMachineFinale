@@ -17,7 +17,7 @@ abstract class BaseProductService<T : Product> {
             }else if (ElectronicsRepository.existsById(productId)){
                 return ElectronicsRepository.findById(productId)
             }
-            throw UnknownEntityException(productId)
+            throw UnknownEntityException(productId, "Product")
         }
 
         fun productExistsById(productId: String): Boolean {
