@@ -1,7 +1,6 @@
 package service
 
 import model.Food
-import model.ProductFactory
 import model.enum.FoodType
 import model.enum.VegNonVeg
 import repository.FoodRepository
@@ -16,9 +15,16 @@ object FoodService : BaseProductService<Food>() {
         vegOrNonVeg: VegNonVeg, ingredients: List<String>,
         shelfLifeMonths: Int, foodType: FoodType
     ): Food {
-        val food = ProductFactory.createFood(
-            productName, brand, description, warning, price,
-            vegOrNonVeg, ingredients, shelfLifeMonths, foodType
+        val food = Food(
+            productName = productName,
+            brand = brand,
+            description = description,
+            price = price,
+            vegOrNonVeg = vegOrNonVeg,
+            ingredients = ingredients.toMutableList(),
+            shelfLifeMonths = shelfLifeMonths,
+            foodType = foodType,
+            warning = warning
         )
         ProductRepository.add(food)
         FoodRepository.add(food)
