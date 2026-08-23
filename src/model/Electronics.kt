@@ -1,6 +1,7 @@
 package model
 
 import model.enum.ElectronicTypes
+import model.enum.ProductCategory
 import java.math.BigDecimal
 
 // The purpose of Electronics is to represent an electronics product. Electronics never expire so CommonValuesBatch.expiryDate will always be null for these.
@@ -22,8 +23,8 @@ class Electronics(
     warning = warning
 ) {
     init {
-        require(warrantyMonths >= 0) { "Warranty months cannot be negative" }
-    }
+        require(warrantyMonths > 0) { "Warranty months cannot be negative" }
+    }//not >= 0, some electronics could be sold without a warranty
 
     override fun toString(): String =
         super.toString() + "\n" +
