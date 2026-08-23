@@ -119,12 +119,16 @@ class ConsumerUI : Interactable {
         var paid = BigDecimal.ZERO
         println("\nAccepted: ${IndianCurrency.entries.joinToString(", ") { "Rs.${it.value}" }}")
         println("Type amount or DONE to cancel.\n")
+
         while (paid < totalRequired) {
             println("  Paid: ₹$paid  |  Still needed: ₹${totalRequired - paid}")
             val input = prompt("  Insert: ").uppercase()
+
             if (input == "DONE") { println("Cancelled."); return EnumMap(IndianCurrency::class.java) }
+
             val coin = input.toIntOrNull()?.let { amt -> IndianCurrency.entries.find { it.value == amt } }
             if (coin == null) { println("  Invalid denomination."); continue }
+
             payment[coin] = (payment[coin] ?: 0) + 1
             paid += BigDecimal.valueOf(coin.value.toLong())
             println("  Accepted ₹${coin.value}  |  Total: ₹$paid")

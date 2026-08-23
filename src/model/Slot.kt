@@ -28,7 +28,7 @@ class Slot(
         }
         if (batches.any { it.productId == batch.productId }) {
             throw IllegalArgumentException(
-                "Product ${batch.productId} already exists in slot $slotId. Use refillSlot() instead."
+                "Product ${batch.productId} already exists in slot $slotId."
             )
         }
         batches.add(batch)

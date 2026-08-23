@@ -25,7 +25,7 @@ data class CommonValuesBatch(
         }
     }
 
-    // Why? Convenience check used by service layer
+    // Why? Convenience check used by service layer, as of so that in future if there is a requirement to check with a date in mind then we can use the same function by only passing a parameter
     fun isExpired(asOf: LocalDate = LocalDate.now()): Boolean =
         expiryDate != null && expiryDate.isBefore(asOf)
 

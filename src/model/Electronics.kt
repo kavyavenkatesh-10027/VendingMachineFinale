@@ -18,7 +18,7 @@ class Electronics(
     brand = brand,
     description = description,
     price = price,
-    productCategory = model.enum.ProductCategory.ELECTRONIC,
+    productCategory = ProductCategory.ELECTRONIC,
     warning = warning
 ) {
     init {

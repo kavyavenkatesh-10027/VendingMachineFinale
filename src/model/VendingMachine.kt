@@ -32,7 +32,14 @@ class VendingMachine(
 
     fun getAllSlots(): Set<Slot> = slots.toSet()
 
-    fun getSlotById(slotId: String): Slot? = slots.find { it.slotId == slotId }
+    fun getSlotById(slotId: String): Slot? {
+        for (slot in slots) {
+            if (slot.slotId == slotId) {
+                return slot
+            }
+        }
+        return null
+    }
 
     override fun toString(): String =
         """

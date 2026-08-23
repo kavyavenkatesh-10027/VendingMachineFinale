@@ -5,7 +5,7 @@ import model.enum.ProductCategory
 import java.math.BigDecimal
 
 // The purpose of Product is to represent any product sold in a vending machine.
-// Sealed to make use when function which is offered by enum too, but so it can have its own entity and varying properties.
+// Sealed to make use of exhaustive when function without having to put an else block, which is offered by enum too, but so it can have its own entity and varying properties.
 sealed class Product(
     val productName: String,
     val brand: String,
