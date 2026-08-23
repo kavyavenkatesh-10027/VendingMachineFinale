@@ -3,7 +3,6 @@ package service
 import model.Electronics
 import model.enum.ElectronicTypes
 import repository.ElectronicsRepository
-import repository.ProductRepository
 import java.math.BigDecimal
 
 object ElectronicsService : BaseProductService<Electronics>() {
@@ -23,7 +22,6 @@ object ElectronicsService : BaseProductService<Electronics>() {
                 electronicsType = electronicsType,
                 warning = warning
             )
-        ProductRepository.add(electronics)
         ElectronicsRepository.add(electronics)
         return electronics
     }

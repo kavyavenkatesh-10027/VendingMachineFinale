@@ -4,7 +4,6 @@ import model.Food
 import model.enum.FoodType
 import model.enum.VegNonVeg
 import repository.FoodRepository
-import repository.ProductRepository
 import java.math.BigDecimal
 
 object FoodService : BaseProductService<Food>() {
@@ -26,7 +25,6 @@ object FoodService : BaseProductService<Food>() {
             foodType = foodType,
             warning = warning
         )
-        ProductRepository.add(food)
         FoodRepository.add(food)
         return food
     }

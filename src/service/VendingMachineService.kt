@@ -11,7 +11,6 @@ import model.Slot
 import model.VendingMachine
 import model.enum.Location
 import model.enum.ProductCategory
-import repository.ProductRepository
 import repository.VendingMachineRepository
 import java.time.LocalDate
 
@@ -64,7 +63,9 @@ object VendingMachineService {
         return productIds
             .filter { productId -> getTotalSellableQuantity(vm, productId) > 0 }
             .map { productId ->
-                try { ProductRepository.findById(productId) }
+                try {
+                    BaseProductService.getProductById(productId)
+                }
                 catch (_: VendingMachineException) {
                     throw CorruptedDataException("Machine '$vendingMachineId' has unregistered product '$productId'")
                 }
@@ -84,7 +85,7 @@ object VendingMachineService {
     }
 
     fun getAvailableQuantityForOneProduct(vendingMachineId: String, productId: String): Int {
-        if (!ProductRepository.existsById(productId)) {
+        if (!BaseProductService.productExistsById(productId)) {
             throw UnknownEntityException(productId, "Product")
         }
         return getTotalSellableQuantity(getVendingMachineById(vendingMachineId), productId)
@@ -105,7 +106,7 @@ object VendingMachineService {
     private fun validateBatches(category: ProductCategory, batches: List<CommonValuesBatch>) {
         require(batches.isNotEmpty()) { "A slot must have at least one batch." }
         for (batch in batches) {
-            val product = ProductRepository.findById(batch.productId)
+            val product = BaseProductService.getProductById(batch.productId)
             if (product.productCategory != category) {
                 throw MismatchingProductTypeAndVendingMachine(category, product.productCategory)
             }

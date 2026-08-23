@@ -6,7 +6,6 @@ import exception.VendingMachineException
 import model.Purchase
 import model.VendingMachine
 import model.enum.IndianCurrency
-import repository.ProductRepository
 import repository.PurchaseRepository
 import java.math.BigDecimal
 
@@ -21,7 +20,7 @@ object PurchaseService {
         for ((productId, qty) in cart) {
             require(productId.isNotBlank())  { "Product ID cannot be blank" }
             require(qty > 0)                 { "Quantity must be greater than zero" }
-            val product = ProductRepository.findById(productId)
+            val product = BaseProductService.getProductById(productId)
             val stock = VendingMachineService.getTotalSellableQuantity(vm, productId)
             if (stock < qty) {
                 throw AvailabilityRequirementException(
@@ -67,7 +66,7 @@ object PurchaseService {
 
     fun getCartTotal(cart: Map<String, Int>): BigDecimal =
         cart.entries.fold(BigDecimal.ZERO) { acc, (productId, qty) ->
-            acc + ProductRepository.findById(productId).price * BigDecimal.valueOf(qty.toLong())
+            acc + BaseProductService.getProductById(productId).price * BigDecimal.valueOf(qty.toLong())
         }
 
     fun getAllPurchases(): Set<Purchase> = PurchaseRepository.findAll()

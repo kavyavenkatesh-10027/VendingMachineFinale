@@ -55,7 +55,6 @@ object SampleDataGenerator {
         )
         listOf(lays, bisleri, cocaCola, dairyMilk, monster).forEach {
             FoodRepository.add(it)
-            ProductRepository.add(it)
         }
 
         // ── ProductionBatches ──────────────────────────────────────────────────

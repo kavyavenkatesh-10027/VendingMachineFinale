@@ -8,7 +8,6 @@ import model.Food
 import model.CommonValuesBatch
 import model.enum.Location
 import model.enum.ProductCategory
-import repository.ProductRepository
 import java.time.LocalDate
 
 object SlotService {
@@ -24,7 +23,7 @@ object SlotService {
         category: ProductCategory
     ) {
         val slot = VendingMachineService.getSlotById(vendingMachineId, slotId)
-        val product = ProductRepository.findById(productId)
+        val product = BaseProductService.getProductById(productId)
 
         if (product.productCategory != category) {
             throw MismatchingProductTypeAndVendingMachine(category, product.productCategory)
@@ -56,7 +55,7 @@ object SlotService {
             )
         }
 
-        val product = ProductRepository.findById(productId)
+        val product = BaseProductService.getProductById(productId)
         val batch = buildBatch(product, productId, manufacturingLocation, manufacturingDate, quantity)
         slot.refillSlot(batch)
     }
