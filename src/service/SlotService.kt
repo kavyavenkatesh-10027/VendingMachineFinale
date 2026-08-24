@@ -25,7 +25,7 @@ object SlotService {
         val slot = VendingMachineService.getSlotById(vendingMachineId, slotId)
         val product = BaseProductService.getProductById(productId)
 
-        if (product.productCategory != category) {
+        if (product.productCategory != VendingMachineService.getVendingMachineById(vendingMachineId).productTypeInside) {
             throw MismatchingProductTypeAndVendingMachine(category, product.productCategory)
         }
         if (slot.getBatches().any { it.productId == productId }) {
