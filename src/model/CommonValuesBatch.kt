@@ -17,11 +17,12 @@ data class CommonValuesBatch(
         "${manufacturingLocation}-${manufacturingDate}-${IDGenerator.generateBatchId()}"
 
     init {
-        require(productId.isNotBlank())                          { "Product ID cannot be blank" }
-        require(!manufacturingDate.isAfter(LocalDate.now()))     { "Manufacturing date cannot be in the future" }
-        require(quantity > 0)                                    { "Quantity must be greater than zero" }
-        expiryDate?.let {
-            require(it.isAfter(manufacturingDate))               { "Expiry date must be after manufacturing date" }
+        require(productId.isNotBlank())                      { "Product ID cannot be blank" }
+        require(!manufacturingDate.isAfter(LocalDate.now())) { "Manufacturing date cannot be in the future" }
+        require(quantity > 0)                                { "Quantity must be greater than zero" }
+
+        if (expiryDate != null) {
+            require(expiryDate.isAfter(manufacturingDate))  { "Expiry date must be after manufacturing date" }
         }
     }
 
@@ -34,3 +35,4 @@ data class CommonValuesBatch(
                 "MFD: $manufacturingDate | Expiry: ${expiryDate ?: "N/A"} | " +
                 "Origin: $manufacturingLocation | Qty: $quantity"
 }
+///input as option to complete

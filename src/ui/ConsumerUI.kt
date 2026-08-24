@@ -146,7 +146,10 @@ class ConsumerUI : Interactable {
 
             if (input == "DONE") { println("Cancelled."); return EnumMap(IndianCurrency::class.java) }
 
-            val coin = input.toIntOrNull()?.let { amt -> IndianCurrency.entries.find { it.value == amt } }
+            val amt = input.toIntOrNull()
+            val coin = if (amt != null) {
+                IndianCurrency.entries.find { it.value == amt }
+            } else null
             if (coin == null) { println("  Invalid denomination."); continue }
 
             payment[coin] = (payment[coin] ?: 0) + 1
