@@ -3,7 +3,7 @@ package model
 import generator.IDGenerator
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import util.DateFormatterUtil
 
 // The purpose of Purchase is to be an immutable record of a completed transaction.
 data class Purchase(
@@ -13,6 +13,7 @@ data class Purchase(
     val changeReturned: BigDecimal,
     val purchaseTime: LocalDateTime = LocalDateTime.now()
 ) {
+
     val purchaseId: String = IDGenerator.generatePurchaseId()
 
     init {
@@ -24,14 +25,15 @@ data class Purchase(
 
     fun getItemsPurchased(): Map<String, Int> = itemsPurchased.toMap()
 
+    fun formattedPurchaseTime(): String = purchaseTime.format(DateFormatterUtil.purchaseDateFormatter)
+
     override fun toString(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val itemsFormatted = itemsPurchased.entries.joinToString(", ") { "${it.key} x${it.value}" }
 
         return """
             
             Purchase ID       : $purchaseId
-            Time              : ${purchaseTime.format(formatter)}
+            Time              : ${formattedPurchaseTime()}
             Items             : $itemsFormatted
             Total             : Rs.$totalAmount
             Paid              : Rs.$moneyPaidByCustomer

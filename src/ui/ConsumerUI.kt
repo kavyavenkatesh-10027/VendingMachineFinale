@@ -164,7 +164,7 @@ class ConsumerUI : Interactable {
         println("              RECEIPT")
         println("=====================================")
         println("  ID     : ${purchase.purchaseId}")
-        println("  Time   : ${purchase.purchaseTime}")
+        println("  Time   : ${purchase.formattedPurchaseTime()}")
         println("  Items  : ${purchase.getItemsPurchased()}")
         println("  Total  : Rs.${purchase.totalAmount}")
         println("  Paid   : Rs.${purchase.moneyPaidByCustomer}")

@@ -334,7 +334,7 @@ class AdminUI : Interactable {
         println("\n===== Purchase History =====")
         for (p in purchases) {
             println("  ID     : ${p.purchaseId}")
-            println("  Time   : ${p.purchaseTime}")
+            println("  Time   : ${p.formattedPurchaseTime()}")
             println("  Items  : ${p.getItemsPurchased()}")
             println("  Total  : Rs.${p.totalAmount}")
             println("  Paid   : Rs.${p.moneyPaidByCustomer}")
