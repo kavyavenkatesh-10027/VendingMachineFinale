@@ -310,12 +310,19 @@ class AdminUI : Interactable {
         val denominations = EnumMap<IndianCurrency, Int>(IndianCurrency::class.java)
         println("Enter count for each denomination (Enter to skip):")
         for (denom in IndianCurrency.entries) {
-            val input = prompt("  Rs.${denom.value}: ")
-            if (input.isBlank()) continue
-            try {
-                val count = input.toInt()
-                if (count > 0) denominations[denom] = count
-            } catch (_: NumberFormatException) { println("  Invalid, skipping.") }
+//            var input = prompt("  Rs.${denom.value}: ", false)
+//            if (input.isBlank()) continue
+            while (true) {
+                val input = prompt("  Rs.${denom.value}: ", false)
+                if (input.isBlank()) break
+                try {
+                    val count = input.toInt()
+                    if (count > 0) denominations[denom] = count
+                    break
+                } catch (_: NumberFormatException) {
+                    println("  Invalid quantity.")
+                }
+            }
         }
         if (denominations.isEmpty()) { println("Nothing added."); return }
 
@@ -375,7 +382,7 @@ class AdminUI : Interactable {
         val batches = mutableListOf<CommonValuesBatch>()
         println("Enter batches for $context (blank Product ID to stop):")
         while (true) {
-            val input = prompt("  Product ID (or NEW to register): ").uppercase()
+            val input = prompt("  Product ID (or NEW to register): ", false).uppercase()
             val productId = when {
                 input == "NEW" -> {
                     try { registerProduct(category) }
