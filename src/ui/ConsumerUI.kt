@@ -120,7 +120,7 @@ class ConsumerUI : Interactable {
         val cart = mutableMapOf<String, Int>()
         println("\nAdd items (blank Product ID to finish):")
         while (true) {
-            val productId = prompt("  Product ID: ").uppercase()
+            val productId = prompt("  Product ID: ", false).uppercase()
             if (productId.isBlank()) break
             val available = try {
                 ConsumerController.getAvailableStock(vmId, productId)

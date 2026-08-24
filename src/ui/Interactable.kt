@@ -6,9 +6,23 @@ import java.time.format.DateTimeParseException
 
 interface Interactable {
 
-    fun prompt(label: String): String {
-        print(label)
-        return readln().trim()
+    fun prompt(label: String, required: Boolean = true): String {
+        var input = ""
+        while(true) {
+            print(label)
+            input = readln().trim()
+            if (required) {
+                if (input.isBlank()) {
+                    println("Input is required.")
+                    continue
+                } else {
+                    break
+                }
+            }else{
+                break
+            }
+        }
+        return input
     }
 
     fun readInt(label: String): Int {

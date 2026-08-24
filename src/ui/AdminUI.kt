@@ -238,7 +238,7 @@ class AdminUI : Interactable {
         val name        = prompt("Product name: ")
         val brand       = prompt("Brand: ")
         val description = prompt("Description: ")
-        var warning     = prompt("Warning (Enter to skip): ")
+        var warning     = prompt("Warning (Enter to skip): ", false)
         if (warning.isBlank()) warning = "- nil -"
         val price       = readBigDecimal("Price: ")
         val shelfLife   = readInt("Shelf life (months)")
@@ -256,7 +256,7 @@ class AdminUI : Interactable {
         val name          = prompt("Product name: ")
         val brand         = prompt("Brand: ")
         val description   = prompt("Description: ")
-        var warning       = prompt("Warning (Enter to skip): ")
+        var warning       = prompt("Warning (Enter to skip): ", false)
         if (warning.isBlank()) warning = "- nil -"
         val price         = readBigDecimal("Price: ")
         val warranty      = readInt("Warranty (months)")
