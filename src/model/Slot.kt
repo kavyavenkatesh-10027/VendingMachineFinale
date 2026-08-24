@@ -69,7 +69,6 @@ class Slot(
             batch.quantity -= take
             remaining -= take
         }
-        batches.removeIf { it.quantity == 0 }
     }
 
     fun getSellableQuantity(productId: String): Int =
