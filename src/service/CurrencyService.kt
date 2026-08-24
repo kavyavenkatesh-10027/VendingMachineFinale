@@ -28,7 +28,7 @@ object CurrencyService {
         val denoms = IndianCurrency.entries
 
         for (i in denoms.indices.reversed()) {
-            if (remaining == BigDecimal.ZERO) break
+            if (remaining.compareTo(BigDecimal.ZERO)==0) break
             val denom = denoms[i]
             val denomValue = BigDecimal.valueOf(denom.value.toLong())
             val canUse = remaining.divideToIntegralValue(denomValue).toInt()
@@ -39,7 +39,7 @@ object CurrencyService {
             }
         }
 
-        if (remaining != BigDecimal.ZERO) throw InsufficientDenominationForChangeException(changeAmount)
+        if (remaining.compareTo(BigDecimal.ZERO)!=0) throw InsufficientDenominationForChangeException(changeAmount)
 
         for ((denom, count) in change) drawer.deduct(denom, count)
         return change
